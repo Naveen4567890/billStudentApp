@@ -35,13 +35,16 @@ const Register = () => {
     let {name,username,email,password}=state
     if(!name||!username||!email||!password){
       toast.error("all fields  are mandatory")
+      return
     }
     let{validateAll,getAllValidationErrorMessage}=validatePassword(password)
     if(!validateAll()){
       toast.error(getAllValidationErrorMessage)
+      return
     }
     if(!matched){
       toast.error("password and confirm password are unmatched")
+      return
     }
 
     console.log(state);
