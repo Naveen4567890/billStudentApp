@@ -7,9 +7,12 @@ import { RiLockPasswordFill } from "react-icons/ri";
 import { MdOutlineEventRepeat } from "react-icons/md";
 import {validatePassword} from 'val-pass';
 import toast from 'react-hot-toast';
+import empServices from '../../service/empServices';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
-
+ 
+  let nagivate=useNavigate()
   const [state,setState]=useState({})
   const [matched,setMatched]=useState(true)
   const [errorMessage,setErrorMessage]=useState("")
@@ -32,8 +35,8 @@ const Register = () => {
 
   const handleSubmit=(e)=>{
     e.preventDefault();
-    let {name,username,email,password}=state
-    if(!name||!username||!email||!password){
+    let {name,userName,email,password}=state
+    if(!name||!userName||!email||!password){
       toast.error("all fields  are mandatory")
       return
     }
@@ -47,7 +50,23 @@ const Register = () => {
       return
     }
 
-    console.log(state);
+    (async ()=>{
+      
+      try {
+        let data=await empServices.regiUser(state)
+        if(data.status==201){
+        toast.success("registered successfully")
+        nagivate("/login")
+      }
+      else{
+        toast.error("something went wrong")
+        return
+      }
+      } catch (error) {
+        toast.error("something went wrong")
+        return
+      }
+    })()
     
   }
   return (
@@ -55,7 +74,7 @@ const Register = () => {
       <form action=""  onSubmit={handleSubmit} className='w-1/2 h-[90%] bg-white rounded-3xl shadow-2xl grid place-items-center px-[7%] py-8 max-sm:w-[90%] overflow-scroll'>
         <div className='size-full grid place-items-center text-2xl font-bold'><h1 className=' text-3xl sm:text-2xl'>Registration form</h1></div>
         <div className='flex w-full h-2/3 rounded-lg border-2' ><input type="text" name="name" placeholder='Enter Name' onChange={handleChange} className='flex px-8 w-[95%] h-full outline-0' /><span className=' p-2 grid place-content-center'><CgRename /></span></div>
-        <div className='flex w-full h-2/3 rounded-lg border-2'><input type="text" name="username" placeholder='Enter UserName' onChange={handleChange} className='flex px-8 w-[95%] h-full outline-0'/><span className='p-2 grid place-items-center'><FaRegUserCircle /></span></div>
+        <div className='flex w-full h-2/3 rounded-lg border-2'><input type="text" name="userName" placeholder='Enter UserName' onChange={handleChange} className='flex px-8 w-[95%] h-full outline-0'/><span className='p-2 grid place-items-center'><FaRegUserCircle /></span></div>
         <div className='flex w-full h-2/3 rounded-lg border-2'><input type="email" name="email" placeholder='Enter Email' onChange={handleChange} className='flex px-8 w-[95%] h-full outline-0'/><span className='p-2 grid place-items-center'><MdEmail /></span></div>
         <div className='flex w-full h-2/3 rounded-lg border-2'><input type="password" name="password" placeholder='Enter Password' onChange={handleChange} className='flex px-8 w-[95%] h-full outline-0'/><span className='p-2 grid place-items-center'><RiLockPasswordFill /></span></div>
         <div className={`flex w-full h-2/3 rounded-lg ${!errorMessage?'hidden':''} `}><span className='border-red-700'>*{errorMessage}</span></div>
