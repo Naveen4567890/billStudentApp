@@ -28,7 +28,7 @@ let routes=createBrowserRouter([
             path:"AddBills",
             element:<AddBills></AddBills>
         },{
-            path:"FilterBills",
+            path:"filter",
             element:<FilterBills></FilterBills>
         },
     ]
