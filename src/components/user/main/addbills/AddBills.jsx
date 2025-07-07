@@ -1,7 +1,12 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import BillItems from '../../../bill/BillItems'
+import { useNavigate } from 'react-router-dom'
+import { contextApi } from '../../../context/Context'
+import toast from 'react-hot-toast'
+import empServices from '../../../../service/empServices'
 
 const Addbills = () => {
+  const navigate=useNavigate()
   const [bill,setBill]=useState({
     companyName:"",
     PoNo:"",
@@ -12,6 +17,7 @@ const Addbills = () => {
     GSTNo:"",
     clientBankName:""
   })
+  const {globalState}=useContext(contextApi)
   const [items,setItems]=useState([])
   const handelChange=(e)=>{
     let {name,value}=e.target
@@ -47,9 +53,25 @@ const Addbills = () => {
     GSTNo,
     clientBankName,
     items,
+     invoiceDate:new Date().toISOString().split("T")[0],
     totalAmount
    }
     console.log(payload);
+    (async () => {
+      try {
+        let data=await empServices.addBills(payload,globalState.token)
+        if(data.status==201){
+          toast.success("bills added successfully")
+          navigate("/home")
+        }
+        else{
+           toast.error("something went wrong")
+        }
+        
+      } catch (error) {
+        toast.error("something went wrong")
+      }
+    })();
     
   }
   const removeElement=(id)=>{
@@ -93,7 +115,8 @@ setItems(items.filter((val)=>val.id!=id))
             </div>
     
             <div className='border-2  w-full flex justify-center items-center px-3 rounded-sm'>
-              <input type="date" name="workCompletionDate" placeholder='Enter Work Completion Date' className='w-full outline-none px-4 h-10' onChange={handelChange}/>
+              <input type="date" name="workCompletionDate" placeholder='Enter Work Completion Date' className='w-full outline-none px-4 h-10' onChange={handelChange}
+              max={new Date().toISOString().split("T")[0]}/>
         
             </div>
               

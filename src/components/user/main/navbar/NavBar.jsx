@@ -26,7 +26,7 @@ const NavBar = () => {
             <NavLink to="/home" className={({isActive})=>isActive?"bg-amber-50 text-black p-2 rounded-sm":""} end>Home</NavLink>
         </div>
         <div className={`max-sm:hidden ${show?'block':""}`}>
-            <NavLink  to="addBills" className={({isActive})=>isActive?"bg-amber-50 text-black p-2 rounded-sm":""}>Add Bills</NavLink>
+            <NavLink  to="AddBills" className={({isActive})=>isActive?"bg-amber-50 text-black p-2 rounded-sm":""}>Add Bills</NavLink>
         </div>
         <div className={`max-sm:hidden${show?'block':""}`}>
             <NavLink to="filter" className={({isActive})=>isActive?"bg-amber-50 text-black p-2 rounded-sm":""}>Filter Bills</NavLink>
