@@ -53,7 +53,7 @@ const Addbills = () => {
     GSTNo,
     clientBankName,
     items,
-     invoiceDate:new Date().toISOString().split("T")[0],
+    invoiceDate:new Date().toISOString().split("T")[0],
     totalAmount
    }
     console.log(payload);
