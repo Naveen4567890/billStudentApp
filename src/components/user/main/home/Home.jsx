@@ -1,11 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { contextApi } from '../../../context/Context'
 import empServices from '../../../../service/empServices'
+import { useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast'
 
 const Home = () => {
 
   const  {globalState}=useContext(contextApi)
   const [allBills,setAllBills]=useState([])
+  const navigate=useNavigate()
   useEffect(()=>{
     (async () => {
       let data=await empServices.allBills(globalState.token)
@@ -14,27 +17,53 @@ const Home = () => {
       }
     })();
   },[])
- 
+ const handelUpateBills=(bill)=>{
+    // console.log(bill);
+    
+    navigate("updateBills",{state:bill})
+  }
+  const handleDeleteBills=(id)=>{
+   console.log(id);
+   (async () => {
+    try {
+      let data= await empServices.deleteBills(globalState.token,id);
+     if(data.status==200){
+      toast.success(`${data.data.message}`)
+      setAllBills((preVal)=>preVal.filter((val)=>val._id!=data.data.bill._id))
+     }
+     else{
+      toast.error('something went wrong')
+     }
+    } catch (error) {
+      toast.error('something went wrong')
+    }
+   })()
+  }
   
   return (
-   allBills.length? <div className='w-[100%] flex gap-10 flex-wrap   py-8 px-8 justify-center'>
-      {
-        allBills.map((val)=>{
-          return (
-        
-      //  console.log(val)
-       
-          <div className='w-1/5 h-4/10 flex items-start flex-col justify-center  shadow-2xl rounded-lg p-5' >
-            <h1 className='font-bold  text-blue-600'>{val.companyName}</h1>
-            <h1>GST.No : {val.GSTNo}</h1>
-            <h1>PAN : {val.PAN}</h1>
-            <h1>Total Amount :{val.totalAmount}/-</h1>
-            <h1>Invoice Date :{val.invoiceDate}</h1>
+   <div className="w-full min-h-screen p-6 bg-gray-100 flex flex-wrap gap-6 justify-center">
+      {allBills.map((bill, index) => (
+        <div
+          key={index}
+          className="w-80 h-60 bg-white rounded-2xl shadow-lg border border-gray-200 hover:shadow-xl transition duration-300 p-6 max-md:w-full"
+        >
+          <h2 className="text-2xl font-bold text-blue-600 mb-3">{bill.companyName}</h2>
+          <div className="text-sm text-gray-700 space-y-1">
+            <p><span className="font-semibold">GST No:</span> {bill.GSTNo}</p>
+            <p><span className="font-semibold">PAN:</span> {bill.PAN}</p>
+            <p><span className="font-semibold">PO No:</span> {bill.PoNo}</p>
+            <p><span className="font-semibold">Total Amount:</span> ₹{bill.totalAmount}</p>
+            <p><span className="font-semibold">Invoice Date:</span> {new Date(bill.invoiceDate).toLocaleDateString()}</p>
+            <div className='flex w-full h-8 gap-2'>
+              <button className='grow size-full bg-amber-500 rounded-sm' onClick={()=>{
+                handelUpateBills(bill)
+              }}>Update</button>
+              <button className='grow size-full bg-red-500 rounded-sm' onClick={()=>{handleDeleteBills(bill._id)}}>Delete</button>
+            </div>
           </div>
-          )
-        })
-      }
-    </div> :<h1>...loading</h1>
+        </div>
+      ))}
+    </div>
   )
 }
 
