@@ -44,7 +44,7 @@ const Login = () => {
   }
 
   return (
-     <div className='size-full bg-linear-to-l from-[#10cec4] to-[#e0c361]  grid place-items-center' >
+     <div className='size-full  grid place-items-center' >
           <form action=""  onSubmit={handleSubmit} className='w-2/5 h-[60%] bg-white rounded-3xl shadow-2xl grid place-items-center px-[7%] py-8 max-sm:w-[80%] overflow-scroll'>
             <div className='size-full grid place-items-center text-xl font-bold'><h1 className='sm:text-3xl'>Login form</h1></div>
             <div className='flex w-full h-2/3 rounded-lg border-2'><input type="email" name="email" placeholder='Enter Email' onChange={handleChange} className='flex px-8 w-[95%] h-full outline-0'/><span className='p-2 grid place-items-center'><MdEmail /></span></div>
