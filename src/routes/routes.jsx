@@ -7,6 +7,8 @@ import About from "../components/user/main/about/About";
 import AddBills from "../components/user/main/addbills/AddBills";
 import FilterBills from "../components/user/main/filter/FilterBills";
 import UpdateBills from "../components/user/main/updateBills/UpdateBills";
+import ViewBills from "../components/viewBill/ViewBills";
+import PrivateRoute from "../components/helper/PrivateRoute";
 
 let routes=createBrowserRouter([
     {
@@ -18,7 +20,7 @@ let routes=createBrowserRouter([
         element:<Login></Login>
     },{
         path:"/home",
-        element:<Main></Main>,
+        element:<PrivateRoute><Main></Main></PrivateRoute>,
         children:[{
             index:true,
             element:<Home></Home>
@@ -34,7 +36,10 @@ let routes=createBrowserRouter([
         },{
                 path:"updateBills",
                 element:<UpdateBills></UpdateBills>
-         }
+         },{
+                path:"viewBills",
+                element:<ViewBills></ViewBills>
+            }
     ]
     }
 ])
